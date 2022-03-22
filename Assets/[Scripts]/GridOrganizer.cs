@@ -3,6 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
+public struct MatchImage
+{
+    public List<Sprite> assets;
+    /* public Texture apple;
+    public Texture Avocado;
+    public Texture Banana;
+    public Texture Blackberry;
+    public Texture Cherry; */
+    
+}
+
 public class GridOrganizer : MonoBehaviour
 {
     public static GridOrganizer instance;
@@ -12,6 +24,7 @@ public class GridOrganizer : MonoBehaviour
     GridLayoutGroup gridLayout;
     [SerializeField]
     Vector2Int GridDimensions = new Vector2Int(6, 6);
+    public MatchImage assetList;
 
     void Awake() 
     {
@@ -29,6 +42,8 @@ public class GridOrganizer : MonoBehaviour
         while (transform.childCount < numCells)
         {
             GameObject newObject = Instantiate(MatchObjPrefab, this.transform);
+            MatchObj instance = newObject.GetComponent<MatchObj>();
+            instance.image.overrideSprite = assetList.assets[1];
         }
 
     }
