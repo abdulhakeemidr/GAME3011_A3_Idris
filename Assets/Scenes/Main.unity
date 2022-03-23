@@ -600,13 +600,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MatchObjPrefab: {fileID: 8488511834711188702, guid: 0c2b28038132fce47a4c452cdafe4ac0, type: 3}
-  GridDimensions: {x: 8, y: 8}
+  GridDimensions: {x: 9, y: 9}
   assetList:
     assets:
     - {fileID: 21300000, guid: 4f24bd25e6d2cec4086f1c2bc5d0d779, type: 3}
     - {fileID: 21300000, guid: e604a4eb154f8b247ac11bb5bef89158, type: 3}
     - {fileID: 21300000, guid: 143e44dd9280ce945b6fbbc40d0d5274, type: 3}
     - {fileID: 21300000, guid: e50695f49d800d84090aed50d3749bf8, type: 3}
+  matchObjs: []
 --- !u!1001 &8488511834463518208
 PrefabInstance:
   m_ObjectHideFlags: 0

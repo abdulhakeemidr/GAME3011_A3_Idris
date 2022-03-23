@@ -6,7 +6,7 @@ using UnityEngine.UI;
 [System.Serializable]
 public class SList<T> : List<T>
 {
-
+    
 }
 
 [System.Serializable]
@@ -38,8 +38,6 @@ public class GridOrganizer : MonoBehaviour
     {
         gridLayout = GetComponent<GridLayoutGroup>();
         gridLayout.constraintCount = GridDimensions.y;
-
-        //slotState = ResourceSlotState.ExtractMode;
 
         int numCells = GridDimensions.x * GridDimensions.y;
         while (transform.childCount < numCells)
