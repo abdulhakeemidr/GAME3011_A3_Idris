@@ -8,7 +8,7 @@ public class MatchObj : MonoBehaviour
     public Image image;
     Button button;
 
-    void Start()
+    void Awake()
     {
         image = GetComponent<Image>();   
     }

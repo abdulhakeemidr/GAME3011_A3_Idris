@@ -4,15 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [System.Serializable]
+public class SList<T> : List<T>
+{
+
+}
+
+[System.Serializable]
 public struct MatchImage
 {
     public List<Sprite> assets;
-    /* public Texture apple;
-    public Texture Avocado;
-    public Texture Banana;
-    public Texture Blackberry;
-    public Texture Cherry; */
-    
 }
 
 public class GridOrganizer : MonoBehaviour
@@ -25,6 +25,9 @@ public class GridOrganizer : MonoBehaviour
     [SerializeField]
     Vector2Int GridDimensions = new Vector2Int(6, 6);
     public MatchImage assetList;
+    
+    [SerializeField]
+    public List<SList<MatchObj>> matchObjs;
 
     void Awake() 
     {
@@ -43,47 +46,27 @@ public class GridOrganizer : MonoBehaviour
         {
             GameObject newObject = Instantiate(MatchObjPrefab, this.transform);
             MatchObj instance = newObject.GetComponent<MatchObj>();
-            instance.image.overrideSprite = assetList.assets[1];
+            int randomNum = Random.Range(0, assetList.assets.Count);
+            instance.image.overrideSprite = assetList.assets[randomNum];
         }
 
-    }
-    /*
-    [SerializeField]
-    public List<List<ResourceSlotController>> resourceSlots;
-    [SerializeField]
-    public ResourceSlotState slotState;
-
-    
-
-    void Start()
-    {
-        gridLayout = GetComponent<GridLayoutGroup>();
-        gridLayout.constraintCount = GridDimensions.y;
-
-
-        slotState = ResourceSlotState.ExtractMode;
-        
-
-        int numCells = GridDimensions.x * GridDimensions.y;
-        while (transform.childCount < numCells)
-        {
-            GameObject newObject = Instantiate(MatchObjPrefab, this.transform);
-        }
-
-        resourceSlots = new List<List<ResourceSlotController>>();
+        matchObjs = new List<SList<MatchObj>>();
         int cellCount = 0;
         for(int i = 0; i < GridDimensions.y; i++)
         {
-            resourceSlots.Add(new List<ResourceSlotController>());
+            matchObjs.Add(new SList<MatchObj>());
             for(int j = 0; j < GridDimensions.x; j++)
             {
-                resourceSlots[i].Add(transform.GetChild(cellCount).GetComponent<ResourceSlotController>());
+                matchObjs[i].Add(transform.GetChild(cellCount).GetComponent<MatchObj>());
                 cellCount++;
             }
         }
         Debug.Log("Generated Item Slots");
-    }
 
+    }
+    /*
+    [SerializeField]
+    public ResourceSlotState slotState;
 
     // This function is called by the toggle button UI
     public void ToggleResourceState()
