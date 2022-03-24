@@ -4,9 +4,24 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [System.Serializable]
-public class SList<T> : List<T>
+public class SList<T>
 {
-    
+    public List<T> subList;
+
+    public SList()
+    {
+        subList = new List<T>();
+    }
+
+    public SList(IEnumerable<T> collection)
+    {
+        subList = new List<T>(collection);
+    }
+
+    public SList(int capacity)
+    {
+        subList = new List<T>(capacity);
+    }
 }
 
 [System.Serializable]
@@ -28,6 +43,7 @@ public class GridOrganizer : MonoBehaviour
     
     [SerializeField]
     public List<SList<MatchObj>> matchObjs;
+    
 
     void Awake() 
     {
@@ -55,27 +71,25 @@ public class GridOrganizer : MonoBehaviour
             matchObjs.Add(new SList<MatchObj>());
             for(int j = 0; j < GridDimensions.x; j++)
             {
-                matchObjs[i].Add(transform.GetChild(cellCount).GetComponent<MatchObj>());
+                matchObjs[i].subList.Add(transform.GetChild(cellCount).GetComponent<MatchObj>());
                 cellCount++;
             }
         }
         Debug.Log("Generated Item Slots");
 
-    }
-    /*
-    [SerializeField]
-    public ResourceSlotState slotState;
 
-    // This function is called by the toggle button UI
-    public void ToggleResourceState()
+        /* matchObjs = new List<MatchObj>();
+        int cellCount = 0;
+        for(int i = 0; i < GridDimensions.y; i++)
+        {
+            matchObjs.Add(transform.GetChild(i).GetComponent<MatchObj>());
+        }
+        Debug.Log("Generated Item Slots"); */
+    }
+
+    // used only by custom list editor
+    public void AddNewArray()
     {
-        if(slotState == ResourceSlotState.ExtractMode)
-        {
-            slotState = ResourceSlotState.ScanMode;
-        }
-        else
-        {
-            slotState = ResourceSlotState.ExtractMode;
-        }
-    } */
+        matchObjs.Add(new SList<MatchObj>());
+    }
 }
