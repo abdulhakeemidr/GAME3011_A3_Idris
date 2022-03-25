@@ -53,10 +53,7 @@ public class GridOrganizer : MonoBehaviour
     }
 
 
-
-
-
-    // Initial setup gathers and defines all data about match 3 objects
+    // Populate2DList() fills the 2d list array with matchObj children objects
     void Populate2DList()
     {
         matchObjs = new List<SList<MatchObj>>();
@@ -82,13 +79,12 @@ public class GridOrganizer : MonoBehaviour
         MatchObj[] objs = GetComponentsInChildren<MatchObj>();
 
         if(objs == null) Debug.Log("no prior child objects");
-        
+
         if(objs != null)
         {
             foreach(MatchObj obj in objs)
             {
-                int randomNum = Random.Range(0, assetList.assets.Count);
-                obj.sprite = assetList.assets[randomNum];
+                AssignRandomSprite(obj);
             }
         }
 
@@ -98,11 +94,14 @@ public class GridOrganizer : MonoBehaviour
         {
             GameObject newObject = Instantiate(MatchObjPrefab, this.transform);
             MatchObj instance = newObject.GetComponent<MatchObj>();
-            int randomNum = Random.Range(0, assetList.assets.Count);
-            // sets a random sprite for each match created
-            instance.sprite = assetList.assets[randomNum];
-            //instance.image.overrideSprite = assetList.assets[randomNum];
+            AssignRandomSprite(instance);
         }
     }
-    
+
+    public void AssignRandomSprite(MatchObj matchObj)
+    {
+        int randomNum = Random.Range(0, assetList.assets.Count);
+        matchObj.sprite = assetList.assets[randomNum];
+        matchObj.image.overrideSprite = matchObj.sprite;
+    }
 }

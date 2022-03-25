@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-
 public class MatchObj : MonoBehaviour
 {
     public Image image;
@@ -13,15 +11,10 @@ public class MatchObj : MonoBehaviour
     [SerializeField]
     Vector2Int slotIndex;
 
-    ImgProbability[] probability;
-
-    int difficulty = 4;
-
     void Awake()
     {
         image = GetComponent<Image>();
-        button = GetComponent<Button>();  
-        //probability = new ImgProbability[difficulty];
+        button = GetComponent<Button>();
     }
 
     void Start()
@@ -30,37 +23,73 @@ public class MatchObj : MonoBehaviour
         FindThisMatchObjIndex();
         button.onClick.AddListener(PrintIndexOnClick);
 
-        CheckHorizontalPeripheralSimilarity();
+        //CheckHorizontalPeripheralSimilarity();
+        FixRandomHorizontalSimilarity();
         CheckVerticalPeripheralSimilarity();
-    }
-
-    void FindThisMatchObjIndex()
-    {
-        bool isTerminated = false;
-        for(int i = 0; i < GridOrganizer.instance.matchObjs.Count; i++)
-        {
-            //thisSlotIndex.y = i;
-            // used to completely break out of nested for loop
-            if(!isTerminated)
-            {
-                for(int j = 0; j < GridOrganizer.instance.matchObjs.Count; j++)
-                {
-                    slotIndex.y = j;
-                    if(GridOrganizer.instance.matchObjs[i].subList[j] == this)
-                    {
-                        isTerminated = true;
-                        break;
-                    }
-                }
-            }
-            else break;
-            slotIndex.x = i;
-        }
     }
 
     void PrintIndexOnClick()
     {
         Debug.Log(slotIndex.x + ", " + slotIndex.y);
+    }
+
+    void FixRandomHorizontalSimilarity()
+    {
+        if(CheckHorizontalPeripheralSimilarity())
+        {
+            var leftSide = GetPeripheralMatch(Peripheral.LEFT, slotIndex);
+            GridOrganizer.instance.AssignRandomSprite(leftSide);
+        }
+    }
+
+    bool CheckHorizontalPeripheralSimilarity()
+    {
+        if(slotIndex.x == 0) return false;
+        if(slotIndex.x == GridOrganizer.instance.matchObjs.Count - 1) return false;
+        
+        var leftSide = GetPeripheralMatch(Peripheral.LEFT, slotIndex);
+        var rightSide = GetPeripheralMatch(Peripheral.RIGHT, slotIndex);
+
+        if(leftSide.sprite == rightSide.sprite)
+        {
+            if(rightSide.sprite == this.sprite)
+            {
+                Debug.Log("Horizontal match at " + slotIndex.x + ", " + slotIndex.y
+                + " is complete match");
+
+                Color debugColor = new Color(1f, 1f, 1f, 0.2f);
+                leftSide.image.color = debugColor;
+                rightSide.image.color = debugColor;
+                this.image.color = debugColor;
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    void CheckVerticalPeripheralSimilarity()
+    {
+        if(slotIndex.y == 0) return;
+        if(slotIndex.y == GridOrganizer.instance.matchObjs.Count - 1) return;
+        
+        var topSide = GetPeripheralMatch(Peripheral.TOP, slotIndex);
+        var bottomSide = GetPeripheralMatch(Peripheral.BOTTOM, slotIndex);
+
+        if(topSide.sprite == bottomSide.sprite)
+        {
+            if(bottomSide.sprite == this.sprite)
+            {
+                Debug.Log("Vertical match at " + slotIndex.x + ", " + slotIndex.y
+                + " is complete match");
+
+                Color debugColor = new Color(1f, 1f, 1f, 0.2f);
+                topSide.image.color = debugColor;
+                bottomSide.image.color = debugColor;
+                this.image.color = debugColor;
+            }
+        }
     }
 
     MatchObj GetPeripheralMatch(Peripheral position, Vector2Int matchPosIndex)
@@ -109,56 +138,29 @@ public class MatchObj : MonoBehaviour
                 peripheralSlot = GridOrganizer.instance.matchObjs[index.x].subList[index.y];
             break;
         }
-
-        // peripheralSlot.m_displayedSlotColor.color = peripheralSlot.m_ScoreColor;
-        // peripheralSlot.isScanned = true;
-        //Debug.Log("Scanned Resource");
         return peripheralSlot;
     }
 
-    void CheckHorizontalPeripheralSimilarity()
+    void FindThisMatchObjIndex()
     {
-        if(slotIndex.x == 0) return;
-        if(slotIndex.x == GridOrganizer.instance.matchObjs.Count - 1) return;
-        
-        var leftSide = GetPeripheralMatch(Peripheral.LEFT, slotIndex);
-        var rightSide = GetPeripheralMatch(Peripheral.RIGHT, slotIndex);
-
-        if(leftSide.sprite == rightSide.sprite)
+        bool isTerminated = false;
+        for(int i = 0; i < GridOrganizer.instance.matchObjs.Count; i++)
         {
-            if(rightSide.sprite == this.sprite)
+            // used to completely break out of nested for loop
+            if(!isTerminated)
             {
-                Debug.Log("Horizontal match at " + slotIndex.x + ", " + slotIndex.y
-                + " is complete match");
-
-                Color debugColor = new Color(1f, 1f, 1f, 0.2f);
-                leftSide.image.color = debugColor;
-                rightSide.image.color = debugColor;
-                this.image.color = debugColor;
+                for(int j = 0; j < GridOrganizer.instance.matchObjs.Count; j++)
+                {
+                    slotIndex.y = j;
+                    if(GridOrganizer.instance.matchObjs[i].subList[j] == this)
+                    {
+                        isTerminated = true;
+                        break;
+                    }
+                }
             }
-        }
-    }
-
-    void CheckVerticalPeripheralSimilarity()
-    {
-        if(slotIndex.y == 0) return;
-        if(slotIndex.y == GridOrganizer.instance.matchObjs.Count - 1) return;
-        
-        var topSide = GetPeripheralMatch(Peripheral.TOP, slotIndex);
-        var bottomSide = GetPeripheralMatch(Peripheral.BOTTOM, slotIndex);
-
-        if(topSide.sprite == bottomSide.sprite)
-        {
-            if(bottomSide.sprite == this.sprite)
-            {
-                Debug.Log("Vertical match at " + slotIndex.x + ", " + slotIndex.y
-                + " is complete match");
-
-                Color debugColor = new Color(1f, 1f, 1f, 0.2f);
-                topSide.image.color = debugColor;
-                bottomSide.image.color = debugColor;
-                this.image.color = debugColor;
-            }
+            else break;
+            slotIndex.x = i;
         }
     }
 }
