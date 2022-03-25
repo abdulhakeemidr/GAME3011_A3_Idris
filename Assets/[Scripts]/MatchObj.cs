@@ -9,11 +9,11 @@ public class MatchObj : MonoBehaviour
     public Sprite sprite;
     Button button;
     [SerializeField]
-    Vector2Int slotIndex;
+    public Vector2Int slotIndex;
 
     void Awake()
     {
-        image = GetComponent<Image>();
+        image = transform.GetChild(0).GetComponent<Image>();
         button = GetComponent<Button>();
     }
 
@@ -21,7 +21,7 @@ public class MatchObj : MonoBehaviour
     {
         image.overrideSprite = sprite;
         FindThisMatchObjIndex();
-        button.onClick.AddListener(PrintIndexOnClick);
+        //button.onClick.AddListener(PrintIndexOnClick);
 
         FixRandomHorizontalSimilarity();
         FixRandomVerticalSimilarity();
@@ -44,6 +44,7 @@ public class MatchObj : MonoBehaviour
         {
             var leftSide = GetPeripheralMatch(Peripheral.LEFT, slotIndex);
             var rightSide = GetPeripheralMatch(Peripheral.RIGHT, slotIndex);
+            // changes the sprite of this match3
             GridOrganizer.instance.AssignRandomSprite(this);
 
             leftSide.image.color = Color.white;
