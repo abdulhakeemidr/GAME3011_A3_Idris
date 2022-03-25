@@ -26,6 +26,9 @@ public class MatchObj : MonoBehaviour
         FixRandomHorizontalSimilarity();
         FixRandomVerticalSimilarity();
         
+        //Debug.Log(CheckHorizontalPeripheralSimilarity());
+        //Debug.Log(CheckVerticalPeripheralSimilarity());
+
         CheckHorizontalPeripheralSimilarity();
         CheckVerticalPeripheralSimilarity();
     }
@@ -76,8 +79,8 @@ public class MatchObj : MonoBehaviour
         {
             if(rightSide.sprite == this.sprite)
             {
-                Debug.Log("Horizontal match at " + slotIndex.x + ", " + slotIndex.y
-                + " is complete match");
+                //Debug.Log("Horizontal match at " + slotIndex.x + ", " + slotIndex.y
+                //+ " is complete match");
 
                 Color debugColor = new Color(1f, 1f, 1f, 0.2f);
                 leftSide.image.color = debugColor;
@@ -103,8 +106,8 @@ public class MatchObj : MonoBehaviour
         {
             if(bottomSide.sprite == this.sprite)
             {
-                Debug.Log("Vertical match at " + slotIndex.x + ", " + slotIndex.y
-                + " is complete match");
+                //Debug.Log("Vertical match at " + slotIndex.x + ", " + slotIndex.y
+                //+ " is complete match");
 
                 Color debugColor = new Color(1f, 1f, 1f, 0.2f);
                 topSide.image.color = debugColor;

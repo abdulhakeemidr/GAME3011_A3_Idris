@@ -33,7 +33,9 @@ public struct MatchImage
 public class GridOrganizer : MonoBehaviour
 {
     public static GridOrganizer instance;
+    public Difficulty difficultyState = Difficulty.EASY;
 
+    int imgVariations;
     [SerializeField]
     GameObject MatchObjPrefab;
     GridLayoutGroup gridLayout;
@@ -48,8 +50,25 @@ public class GridOrganizer : MonoBehaviour
     {
         instance = this;
         
+        DifficultySetting();
         InstantiateMatchObjects();
         Populate2DList();
+    }
+
+    void DifficultySetting()
+    {
+        switch(difficultyState)
+        {
+            case Difficulty.EASY:
+                imgVariations = assetList.assets.Count - 2;
+                break;
+            case Difficulty.MEDIUM:
+                imgVariations = assetList.assets.Count - 1;
+                break;
+            case Difficulty.HARD:
+                imgVariations = assetList.assets.Count;
+                break;
+        }
     }
 
     // Populate2DList() fills the 2d list array with matchObj children objects
@@ -99,7 +118,7 @@ public class GridOrganizer : MonoBehaviour
 
     public void AssignRandomSprite(MatchObj matchObj)
     {
-        int randomNum = Random.Range(0, assetList.assets.Count);
+        int randomNum = Random.Range(0, imgVariations);
         matchObj.sprite = assetList.assets[randomNum];
         matchObj.image.overrideSprite = matchObj.sprite;
     }

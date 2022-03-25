@@ -14,6 +14,13 @@ public enum Peripheral
     BOTTOMRIGHT
 }
 
+public enum Difficulty
+{
+    EASY,
+    MEDIUM,
+    HARD
+}
+
 public class ImgProbability
 {
     public int resourceValue;
