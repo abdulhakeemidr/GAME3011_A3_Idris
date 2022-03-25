@@ -29,7 +29,7 @@ IDragHandler, IEndDragHandler//, IDropHandler
     public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log("On Begin Drag");
-        imgObjRect.parent = canvas.GetComponent<RectTransform>();
+        imgObjRect.SetParent(canvas.GetComponent<RectTransform>());
         canvasGroup.blocksRaycasts = false;
         Debug.Log(eventData.pointerDrag.name + " " + 
         thisMatch.slotIndex.x + ", " + thisMatch.slotIndex.y);
@@ -49,8 +49,55 @@ IDragHandler, IEndDragHandler//, IDropHandler
         thisMatch.slotIndex.x + ", " + thisMatch.slotIndex.y);
 
         MatchObj newMatch = eventData.pointerDrag.GetComponentInParent<MatchObj>();
+
+        if(newMatch == null)
+        {
+            imgObjRect.SetParent(thisMatch.gameObject.GetComponent<RectTransform>());
+            imgObjRect.anchoredPosition = Vector2.zero;
+            return;
+        }
         
-        Debug.Log(eventData.pointerDrag.name + " " + 
+        if(newMatch.slotIndex == (thisMatch.slotIndex + PERIPHERALVEC.LEFT))
+        {
+            //ResetImageMatchPos();
+            Debug.Log("Match");
+            Debug.Log(eventData.pointerDrag.name + " " + 
         newMatch.slotIndex.x + ", " + newMatch.slotIndex.y);
+            return;
+        }
+        else if (newMatch.slotIndex == (thisMatch.slotIndex + PERIPHERALVEC.RIGHT))
+        {
+            Debug.Log("Match");
+            Debug.Log(eventData.pointerDrag.name + " " + 
+        newMatch.slotIndex.x + ", " + newMatch.slotIndex.y);
+            return;
+        }
+        else if(newMatch.slotIndex == (thisMatch.slotIndex + PERIPHERALVEC.TOP))
+        {
+            Debug.Log("Match");
+            Debug.Log(eventData.pointerDrag.name + " " + 
+        newMatch.slotIndex.x + ", " + newMatch.slotIndex.y);
+            return;
+        }
+        else if(newMatch.slotIndex == (thisMatch.slotIndex + PERIPHERALVEC.BOTTOM))
+        {
+            Debug.Log("Match");
+            Debug.Log(eventData.pointerDrag.name + " " + 
+        newMatch.slotIndex.x + ", " + newMatch.slotIndex.y);
+            return;
+        }
+        else
+        {
+            ResetImageMatchPos();
+            return;
+        }
+
+        
+    }
+
+    void ResetImageMatchPos()
+    {
+        imgObjRect.SetParent(thisMatch.gameObject.GetComponent<RectTransform>());
+        imgObjRect.anchoredPosition = Vector2.zero;
     }
 }
