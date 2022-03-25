@@ -11,10 +11,10 @@ public class CustomListEditor : Editor // base class where custom editor behavio
     // variable for storing the target (target is the (every) instance of script being inspected)
     GridOrganizer component;
     SerializedObject GetTarget;
-    SerializedProperty ThisList;
+    /* SerializedProperty ThisList;
     SerializedProperty[] subList;
     int ListSize;
-    int subListSize;
+    int subListSize; */
  
     void OnEnable()
     {

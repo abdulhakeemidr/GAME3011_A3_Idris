@@ -1,2 +1,3 @@
-1. Display array/list of match objects in inspector
-2. 
+1. Randomize objects (no 3 objects of same type lined up on randomization)
+2. Difficulty system
+3. Sound Effects
