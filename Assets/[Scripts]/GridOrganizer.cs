@@ -52,7 +52,6 @@ public class GridOrganizer : MonoBehaviour
         Populate2DList();
     }
 
-
     // Populate2DList() fills the 2d list array with matchObj children objects
     void Populate2DList()
     {

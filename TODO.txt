@@ -1,3 +1,2 @@
-1. Randomize objects on start (no 3 objects of same type lined up on randomization)
-2. Difficulty system
-3. Sound Effects
+1. Difficulty system
+2. Sound Effects

@@ -23,8 +23,10 @@ public class MatchObj : MonoBehaviour
         FindThisMatchObjIndex();
         button.onClick.AddListener(PrintIndexOnClick);
 
-        //CheckHorizontalPeripheralSimilarity();
         FixRandomHorizontalSimilarity();
+        FixRandomVerticalSimilarity();
+        
+        CheckHorizontalPeripheralSimilarity();
         CheckVerticalPeripheralSimilarity();
     }
 
@@ -35,10 +37,30 @@ public class MatchObj : MonoBehaviour
 
     void FixRandomHorizontalSimilarity()
     {
-        if(CheckHorizontalPeripheralSimilarity())
+        while(CheckHorizontalPeripheralSimilarity())
         {
             var leftSide = GetPeripheralMatch(Peripheral.LEFT, slotIndex);
-            GridOrganizer.instance.AssignRandomSprite(leftSide);
+            var rightSide = GetPeripheralMatch(Peripheral.RIGHT, slotIndex);
+            GridOrganizer.instance.AssignRandomSprite(this);
+
+            leftSide.image.color = Color.white;
+            rightSide.image.color = Color.white;
+            this.image.color = Color.white;
+        }
+    }
+
+    void FixRandomVerticalSimilarity()
+    {
+        while(CheckVerticalPeripheralSimilarity())
+        {
+            var topSide = GetPeripheralMatch(Peripheral.TOP, slotIndex);
+            var bottomSide = GetPeripheralMatch(Peripheral.BOTTOM, slotIndex);
+
+            GridOrganizer.instance.AssignRandomSprite(this);
+
+            topSide.image.color = Color.white;
+            bottomSide.image.color = Color.white;
+            this.image.color = Color.white;
         }
     }
 
@@ -69,10 +91,10 @@ public class MatchObj : MonoBehaviour
         return false;
     }
 
-    void CheckVerticalPeripheralSimilarity()
+    bool CheckVerticalPeripheralSimilarity()
     {
-        if(slotIndex.y == 0) return;
-        if(slotIndex.y == GridOrganizer.instance.matchObjs.Count - 1) return;
+        if(slotIndex.y == 0) return false;
+        if(slotIndex.y == GridOrganizer.instance.matchObjs.Count - 1) return false;
         
         var topSide = GetPeripheralMatch(Peripheral.TOP, slotIndex);
         var bottomSide = GetPeripheralMatch(Peripheral.BOTTOM, slotIndex);
@@ -88,8 +110,12 @@ public class MatchObj : MonoBehaviour
                 topSide.image.color = debugColor;
                 bottomSide.image.color = debugColor;
                 this.image.color = debugColor;
+
+                return true;
             }
         }
+
+        return false;
     }
 
     MatchObj GetPeripheralMatch(Peripheral position, Vector2Int matchPosIndex)
