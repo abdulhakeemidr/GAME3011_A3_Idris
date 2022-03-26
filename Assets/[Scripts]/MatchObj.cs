@@ -68,7 +68,7 @@ public class MatchObj : MonoBehaviour
         }
     }
 
-    bool CheckHorizontalPeripheralSimilarity()
+    public bool CheckHorizontalPeripheralSimilarity()
     {
         if(slotIndex.x == 0) return false;
         if(slotIndex.x == GridOrganizer.instance.matchObjs.Count - 1) return false;
@@ -95,7 +95,7 @@ public class MatchObj : MonoBehaviour
         return false;
     }
 
-    bool CheckVerticalPeripheralSimilarity()
+    public bool CheckVerticalPeripheralSimilarity()
     {
         if(slotIndex.y == 0) return false;
         if(slotIndex.y == GridOrganizer.instance.matchObjs.Count - 1) return false;
@@ -115,6 +115,47 @@ public class MatchObj : MonoBehaviour
                 bottomSide.image.color = debugColor;
                 this.image.color = debugColor;
 
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool CheckVerticalMatchOnMove()
+    {
+        if(slotIndex.y == 0) return false;
+        if(slotIndex.y == GridOrganizer.instance.matchObjs.Count - 1) return false;
+        
+        var topSide = GetPeripheralMatch(Peripheral.TOP, slotIndex);
+        var bottomSide = GetPeripheralMatch(Peripheral.BOTTOM, slotIndex);
+
+        if(topSide.sprite == bottomSide.sprite
+        && bottomSide.sprite == this.sprite)
+        {
+            /* Color debugColor = new Color(1f, 1f, 1f, 0.2f);
+            topSide.image.color = debugColor;
+            bottomSide.image.color = debugColor;
+            this.image.color = debugColor; */
+            return true;
+        }
+
+        if(bottomSide.slotIndex.y < GridOrganizer.instance.matchObjs.Count - 1)
+        {
+            var belowBottomSide = GetPeripheralMatch(Peripheral.BOTTOM, bottomSide.slotIndex);
+            if(bottomSide.sprite == belowBottomSide.sprite
+            && bottomSide.sprite == this.sprite)
+            {
+                return true;
+            }
+        }
+
+        if(topSide.slotIndex.y > 0)
+        {
+            var aboveTopSide = GetPeripheralMatch(Peripheral.TOP, topSide.slotIndex);
+            if(topSide.sprite == aboveTopSide.sprite
+            && topSide.sprite == this.sprite)
+            {
                 return true;
             }
         }

@@ -11,7 +11,7 @@ public class PERIPHERALVEC
     public static Vector2Int RIGHT = new Vector2Int(1, 0);
 }
 
-// This script is HELD by the MatchObj GameObject
+// This script is ATTACHED to the MatchObj GameObject
 public class DropHandler : MonoBehaviour, IDropHandler
 {
     MatchObj thisObj;

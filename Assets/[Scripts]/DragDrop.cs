@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-// This script is HELD by the Sprite Image GameObject (child of MatchObj GameObject)
+// This script is ATTACHED to the Sprite Image GameObject (child of MatchObj GameObject)
 public class DragDrop : MonoBehaviour, 
 IPointerDownHandler, IBeginDragHandler, 
 IDragHandler, IEndDragHandler
 {
     private Canvas canvas;
     [SerializeField]
-    MatchObj originalMatch;
+    public MatchObj originalMatch;
     [SerializeField]
-    MatchObj newMatch;
+    public MatchObj newMatch;
     RectTransform imgObjRect;
     CanvasGroup canvasGroup;
 
@@ -52,7 +52,7 @@ IDragHandler, IEndDragHandler
         Debug.Log(eventData.pointerDrag.name + " " + 
         originalMatch.slotIndex.x + ", " + originalMatch.slotIndex.y);
         
-        // gets the reference to the MatchObj the image was placed at
+        // gets the reference to the new MatchObj the image was placed at
         newMatch = eventData.pointerDrag.GetComponentInParent<MatchObj>();
 
         if(newMatch == null)
@@ -71,12 +71,16 @@ IDragHandler, IEndDragHandler
         }
 
         var origMatchRect = originalMatch.gameObject.GetComponent<RectTransform>();
+        // the RectTransform of original Image GameObject that is a child of the new MatchObj GameObject
         RectTransform newMatchImgOrig = newMatch.gameObject.transform.GetChild(0).GetComponent<RectTransform>();
         newMatchImgOrig.SetParent(origMatchRect);
         newMatchImgOrig.LeanMove(Vector3.zero, 0.5f).setEase(LeanTweenType.easeOutCubic);
         SwapImgRefData(ref originalMatch.sprite, ref newMatch.sprite);
         // reset original match as the new match
         originalMatch = newMatch;
+        //newMatchImgOrig.GetComponent<DragDrop>().
+        newMatchImgOrig.GetComponent<DragDrop>().originalMatch = 
+        newMatchImgOrig.GetComponentInParent<MatchObj>();
     }
 
     void ResetImageMatchPos()
