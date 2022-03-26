@@ -73,14 +73,22 @@ IDragHandler, IEndDragHandler
         var origMatchRect = originalMatch.gameObject.GetComponent<RectTransform>();
         // the RectTransform of original Image GameObject that is a child of the new MatchObj GameObject
         RectTransform newMatchImgOrig = newMatch.gameObject.transform.GetChild(0).GetComponent<RectTransform>();
+        // attaches the original Img GameObject (child) of the new MatchObj 
+        // to the original MatchObj (match Obj first clicked)
         newMatchImgOrig.SetParent(origMatchRect);
         newMatchImgOrig.LeanMove(Vector3.zero, 0.5f).setEase(LeanTweenType.easeOutCubic);
         SwapImgRefData(ref originalMatch.sprite, ref newMatch.sprite);
-        // reset original match as the new match
-        originalMatch = newMatch;
-        //newMatchImgOrig.GetComponent<DragDrop>().
+        
+        // original Image GameObject of the new MatchObj gameObject is redefined
+        // so the original MatchObject is the MatchObj that is first moved
         newMatchImgOrig.GetComponent<DragDrop>().originalMatch = 
         newMatchImgOrig.GetComponentInParent<MatchObj>();
+        
+        GridOrganizer.instance.onReset.GatherSwappedMatches(originalMatch, newMatch);
+        // reset original match as the new match
+        originalMatch = newMatch;
+
+        GridOrganizer.instance.onReset.FindMatchOnMoved();
     }
 
     void ResetImageMatchPos()

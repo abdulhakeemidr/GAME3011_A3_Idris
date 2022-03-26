@@ -45,10 +45,14 @@ public class GridOrganizer : MonoBehaviour
     
     [SerializeField]
     public List<SList<MatchObj>> matchObjs;
+
+    public ResetDrop onReset;
     
     void Awake() 
     {
         instance = this;
+
+        onReset = GetComponent<ResetDrop>();
         
         DifficultySetting();
         InstantiateMatchObjects();
