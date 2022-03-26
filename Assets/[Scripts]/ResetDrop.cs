@@ -35,5 +35,16 @@ public class ResetDrop : MonoBehaviour
             Image childImage = child.GetComponent<Image>();
             childImage.color = new Color(1f, 1f, 1f, 0.2f);
         }
+
+        int YAxisFixed = movedObj.slotIndex.y;
+        int XCount = thisOrganizer.matchObjs.Count;
+
+        for(int i = 0; i < XCount; i++)
+        {
+            var MatchIter = thisOrganizer.matchObjs[i].subList[YAxisFixed];
+            GameObject child = MatchIter.transform.GetChild(0).gameObject;
+            Image childImage = child.GetComponent<Image>();
+            childImage.color = new Color(1f, 1f, 1f, 0.2f);
+        }
     }
 }
