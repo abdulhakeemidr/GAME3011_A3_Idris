@@ -11,9 +11,9 @@ public class PERIPHERALVEC
     public static Vector2Int RIGHT = new Vector2Int(1, 0);
 }
 
+// This script is HELD by the MatchObj GameObject
 public class DropHandler : MonoBehaviour, IDropHandler
 {
-    Vector2Int a = PERIPHERALVEC.BOTTOM;
     MatchObj thisObj;
     void Start()
     {

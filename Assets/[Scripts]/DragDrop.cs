@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DragDrop : 
-MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
-IDragHandler, IEndDragHandler//, IDropHandler
+// This script is HELD by the Sprite Image GameObject (child of MatchObj GameObject)
+public class DragDrop : MonoBehaviour, 
+IPointerDownHandler, IBeginDragHandler, 
+IDragHandler, IEndDragHandler
 {
     private Canvas canvas;
-    MatchObj thisMatch;
+    [SerializeField]
+    MatchObj originalMatch;
+    [SerializeField]
+    MatchObj newMatch;
     RectTransform imgObjRect;
     CanvasGroup canvasGroup;
 
     void Start()
     {
-        thisMatch = GetComponentInParent<MatchObj>();
+        originalMatch = GetComponentInParent<MatchObj>();
         imgObjRect = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
         canvasGroup = GetComponent<CanvasGroup>();
@@ -23,7 +27,7 @@ IDragHandler, IEndDragHandler//, IDropHandler
     public void OnPointerDown(PointerEventData eventData)
     {
         Debug.Log("On Pointer Down");
-        Debug.Log(thisMatch.slotIndex.x + ", " + thisMatch.slotIndex.y);
+        Debug.Log(originalMatch.slotIndex.x + ", " + originalMatch.slotIndex.y);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -32,7 +36,7 @@ IDragHandler, IEndDragHandler//, IDropHandler
         imgObjRect.SetParent(canvas.GetComponent<RectTransform>());
         canvasGroup.blocksRaycasts = false;
         Debug.Log(eventData.pointerDrag.name + " " + 
-        thisMatch.slotIndex.x + ", " + thisMatch.slotIndex.y);
+        originalMatch.slotIndex.x + ", " + originalMatch.slotIndex.y);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -46,58 +50,81 @@ IDragHandler, IEndDragHandler//, IDropHandler
         Debug.Log("On End Drag");
         canvasGroup.blocksRaycasts = true;
         Debug.Log(eventData.pointerDrag.name + " " + 
-        thisMatch.slotIndex.x + ", " + thisMatch.slotIndex.y);
-
-        MatchObj newMatch = eventData.pointerDrag.GetComponentInParent<MatchObj>();
+        originalMatch.slotIndex.x + ", " + originalMatch.slotIndex.y);
+        
+        // gets the reference to the MatchObj the image was placed at
+        newMatch = eventData.pointerDrag.GetComponentInParent<MatchObj>();
 
         if(newMatch == null)
         {
-            imgObjRect.SetParent(thisMatch.gameObject.GetComponent<RectTransform>());
-            imgObjRect.anchoredPosition = Vector2.zero;
+            ResetImageMatchPos();
             return;
         }
-        
-        if(newMatch.slotIndex == (thisMatch.slotIndex + PERIPHERALVEC.LEFT))
+
+        if(newMatch.slotIndex != (originalMatch.slotIndex + PERIPHERALVEC.LEFT)
+        && newMatch.slotIndex != (originalMatch.slotIndex + PERIPHERALVEC.RIGHT)
+        && newMatch.slotIndex != (originalMatch.slotIndex + PERIPHERALVEC.TOP)
+        && newMatch.slotIndex != (originalMatch.slotIndex + PERIPHERALVEC.BOTTOM))
+        {
+            ResetImageMatchPos();
+            return;
+        }
+
+        var origMatchRect = originalMatch.gameObject.GetComponent<RectTransform>();
+        RectTransform newMatchImgOrig = newMatch.gameObject.transform.GetChild(0).GetComponent<RectTransform>();
+        newMatchImgOrig.SetParent(origMatchRect);
+        newMatchImgOrig.LeanMove(Vector3.zero, 0.5f).setEase(LeanTweenType.easeOutCubic);
+        SwapImgRefData(ref originalMatch.sprite, ref newMatch.sprite);
+        // reset original match as the new match
+        originalMatch = newMatch;
+    }
+
+    void ResetImageMatchPos()
+    {
+        imgObjRect.SetParent(originalMatch.gameObject.GetComponent<RectTransform>());
+        imgObjRect.anchoredPosition = Vector2.zero;
+    }
+
+    void SwapImgRefData(ref Sprite original, ref Sprite newMatch)
+    {
+        Sprite temp = newMatch;
+
+        newMatch = original;
+        original = temp;
+    }
+}
+
+/* if(newMatch.slotIndex == (originalMatch.slotIndex + PERIPHERALVEC.LEFT))
         {
             //ResetImageMatchPos();
             Debug.Log("Match");
             Debug.Log(eventData.pointerDrag.name + " " + 
-        newMatch.slotIndex.x + ", " + newMatch.slotIndex.y);
+            newMatch.slotIndex.x + ", " + newMatch.slotIndex.y);
             return;
         }
-        else if (newMatch.slotIndex == (thisMatch.slotIndex + PERIPHERALVEC.RIGHT))
+        else if (newMatch.slotIndex == (originalMatch.slotIndex + PERIPHERALVEC.RIGHT))
         {
             Debug.Log("Match");
             Debug.Log(eventData.pointerDrag.name + " " + 
-        newMatch.slotIndex.x + ", " + newMatch.slotIndex.y);
+            newMatch.slotIndex.x + ", " + newMatch.slotIndex.y);
             return;
         }
-        else if(newMatch.slotIndex == (thisMatch.slotIndex + PERIPHERALVEC.TOP))
+        else if(newMatch.slotIndex == (originalMatch.slotIndex + PERIPHERALVEC.TOP))
         {
             Debug.Log("Match");
             Debug.Log(eventData.pointerDrag.name + " " + 
-        newMatch.slotIndex.x + ", " + newMatch.slotIndex.y);
+            newMatch.slotIndex.x + ", " + newMatch.slotIndex.y);
             return;
         }
-        else if(newMatch.slotIndex == (thisMatch.slotIndex + PERIPHERALVEC.BOTTOM))
+        else if(newMatch.slotIndex == (originalMatch.slotIndex + PERIPHERALVEC.BOTTOM))
         {
             Debug.Log("Match");
             Debug.Log(eventData.pointerDrag.name + " " + 
-        newMatch.slotIndex.x + ", " + newMatch.slotIndex.y);
+            newMatch.slotIndex.x + ", " + newMatch.slotIndex.y);
             return;
         }
         else
         {
             ResetImageMatchPos();
             return;
-        }
-
-        
-    }
-
-    void ResetImageMatchPos()
-    {
-        imgObjRect.SetParent(thisMatch.gameObject.GetComponent<RectTransform>());
-        imgObjRect.anchoredPosition = Vector2.zero;
-    }
-}
+        } */

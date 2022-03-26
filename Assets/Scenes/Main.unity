@@ -593,7 +593,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e122884ae6e04f48a3252d7ac7f8e10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  difficultyState: 0
+  difficultyState: 2
   MatchObjPrefab: {fileID: 8488511834711188702, guid: 0c2b28038132fce47a4c452cdafe4ac0, type: 3}
   GridDimensions: {x: 9, y: 9}
   assetList:
