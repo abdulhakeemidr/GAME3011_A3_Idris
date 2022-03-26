@@ -1,5 +1,4 @@
 2. Sound Effects
-3. Drag and Drop (Swap Mechanic)
 4. Match and Remove Mechanic
 5. Game ends when desired number of matches complete
 6. Timer that player races against to end the game (dependant on difficulty)
